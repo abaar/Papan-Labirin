@@ -6,10 +6,9 @@ BEGIN_EVENT_TABLE(ImageWindow,wxWindow)
 EVT_PAINT(ImageWindow::OnPaint)
 END_EVENT_TABLE()
 
-ImageWindow::ImageWindow(wxFrame *parent)
-	:wxWindow(parent, wxID_ANY) {
+ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, wxID_ANY) {
+	this->SetSize(0, 0, 500, 500, wxSIZE_FORCE);
 	this->SetBackgroundColour(wxColour(*wxWHITE));
-
 	//load jpeg handler
 	wxImageHandler *jpegLoader = new wxJPEGHandler();
 	wxImage::AddHandler(jpegLoader);
