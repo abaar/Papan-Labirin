@@ -7,7 +7,6 @@ EVT_PAINT(ImageWindow::OnPaint)
 END_EVENT_TABLE()
 
 ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, wxID_ANY) {
-	this->SetSize(0, 0, 500, 500, wxSIZE_FORCE);
 	this->SetBackgroundColour(wxColour(*wxWHITE));
 	//load jpeg handler
 	wxImageHandler *jpegLoader = new wxJPEGHandler();
@@ -27,19 +26,11 @@ void ImageWindow::LoadPotatoBitMap() {
 	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\Dazai.jpg");
 	wxMessageOutputDebug().Printf("Relative path of image is at %s", fileLocation);
 	wxImage image(fileLocation, wxBITMAP_TYPE_JPEG);
-
-	/*Kalau pake absolute path
-	
-		wxImage image(wxT("c:\\user\\blablabla"),wxBITMAP_TYPE_JPEG);
-	*/
-
 	fileLocation = stdPaths.GetExecutablePath();
 	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\Dazai.jpg");
 	wxMessageOutputDebug().Printf("Relative path of image is at %s", fileLocation);
 	wxImage image2(fileLocation, wxBITMAP_TYPE_JPEG);
-
-	image.Rescale(20, 20);
-	potatoBitMap = new wxBitmap(image);
+	image.Rescale(50, 50);
 	potatoBitMap2 = new wxBitmap(image2);
 }
 

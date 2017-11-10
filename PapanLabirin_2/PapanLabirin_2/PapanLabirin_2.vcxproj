@@ -117,15 +117,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="ImageFrame.cpp" />
     <ClCompile Include="ImageWindow.cpp" />
     <ClCompile Include="main.cpp">
       <DeploymentContent>true</DeploymentContent>
     </ClCompile>
+    <ClCompile Include="MainBoard.cpp" />
+    <ClCompile Include="MainCharacter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Definer.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="ImageFrame.h" />
     <ClInclude Include="ImageWindow.h" />
+    <ClInclude Include="MainBoard.h" />
+    <ClInclude Include="MainCharacter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
