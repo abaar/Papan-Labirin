@@ -4,6 +4,7 @@
 
 BEGIN_EVENT_TABLE(ImageWindow,wxWindow)
 EVT_PAINT(ImageWindow::OnPaint)
+EVT_KEY_DOWN(ImageWindow::OnKeyDown)
 END_EVENT_TABLE()
 
 ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, wxID_ANY) {
@@ -42,5 +43,20 @@ void ImageWindow::OnPaint(wxPaintEvent &event) {
 	}
 	if (potatoBitMap2 != nullptr) {
 		pdc.DrawBitmap(*potatoBitMap2, wxPoint(200, 200), true);
+	}
+}
+
+void ImageWindow::OnKeyDown(wxKeyEvent &event) {
+	if (event.GetKeyCode() == WXK_UP) {
+		//goes up
+	}
+	else if (event.GetKeyCode() == WXK_DOWN) {
+		//goes down
+	}
+	else if (event.GetKeyCode() == WXK_LEFT) {
+		//goes left
+	}
+	else if (event.GetKeyCode() == WXK_RIGHT) {
+		//goes right
 	}
 }

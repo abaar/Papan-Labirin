@@ -9,6 +9,7 @@ public:
 	ImageWindow(wxFrame *parent);
 	~ImageWindow();
 	void OnPaint(wxPaintEvent &event);
+	void OnKeyDown(wxKeyEvent &event);
 
 private:
 	vector <wxBitmap*> wallData;
