@@ -1,8 +1,11 @@
 #pragma once
 #include "Definer.h"
-
+#include "wx/stdpaths.h"
+#include "wx/filename.h"
+#include "wx\wx.h"
 
 using namespace std;
+
 class GameObject
 {
 public:
@@ -12,12 +15,14 @@ public:
 	void SetPosition(int x, int y);
 	void SetPosition(Vector2 &position);
 	void SetName(string name);
+	void SetBitMap(string path);
 	string GetName();
 	Vector2 GetPosition();
-	virtual int onCollision(GameObject &collider);
+	virtual int onCollision(GameObject *collider);
 private:
 	string objectName;
 	int xPosition;
 	int yPosition;
+	wxBitmap *sprite = nullptr;
 };
 

@@ -8,7 +8,7 @@ END_EVENT_TABLE()
 
 ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, wxID_ANY) {
 	this->SetBackgroundColour(wxColour(*wxWHITE));
-	//load jpeg handler
+	
 	wxImageHandler *jpegLoader = new wxJPEGHandler();
 	wxImage::AddHandler(jpegLoader);
 

@@ -1,11 +1,12 @@
 #pragma once
 #include "GameObject.h"
-class Enemy :
+
+class Dynamic :
 	public GameObject
 {
 public:
-	Enemy();
-	~Enemy();
+	Dynamic();
+	~Dynamic();
 	void Move();
 };
 

@@ -1,7 +1,5 @@
 #include "GameObject.h"
 
-
-
 GameObject::GameObject()
 {
 }
@@ -30,6 +28,21 @@ void GameObject::SetName(string name)
 	objectName = name;
 }
 
+void GameObject::SetBitMap(string path)
+{
+	if (path.length()) {
+		wxStandardPaths &stdPaths = wxStandardPaths::Get();
+		wxString fileLocation = stdPaths.GetExecutablePath();
+		fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + path);
+		wxImage image(fileLocation, wxBITMAP_TYPE_JPEG);
+		image.Rescale(50, 50);
+		sprite = new wxBitmap(image);
+	}
+	else {
+		sprite = nullptr;
+	}
+}
+
 string GameObject::GetName()
 {
 	return objectName;
@@ -40,7 +53,7 @@ Vector2 GameObject::GetPosition()
 	return Vector2(xPosition,yPosition);
 }
 
-int GameObject::onCollision(GameObject & collider)
+int GameObject::onCollision(GameObject *collider)
 {
 	return 0;
 }

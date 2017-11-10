@@ -1,10 +1,5 @@
 #include "MainCharacter.h"
 
-
-
-
-
-
 MainCharacter::MainCharacter(string name)
 {
 	playerName = name;
