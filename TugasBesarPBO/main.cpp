@@ -4,8 +4,8 @@
 #include "Monster.h"
 #include "Papan.h"
 #include "Relik.h"
-#include <Windows.h>
-#include <time.h>
+//#include <Windows.h>
+//#include <time.h>
 #include <ctime>
 using namespace std;
 
