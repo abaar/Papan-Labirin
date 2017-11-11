@@ -12,9 +12,6 @@ public:
 	void OnKeyDown(wxKeyEvent &event);
 
 private:
-	vector <wxBitmap*> wallData;
-	wxBitmap *potatoBitMap= nullptr;
-	wxBitmap *potatoBitMap2 = nullptr;
-	DECLARE_EVENT_TABLE();
-	void LoadPotatoBitMap();
+	DECLARE_EVENT_TABLE()
+	
 };

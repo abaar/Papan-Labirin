@@ -1,10 +1,19 @@
 #include "MainBoard.h"
 
-
+MainBoard* MainBoard::main = NULL;
 
 MainBoard::MainBoard()
 {
-	boardSize = 5;
+	
+	SetBoardSize(5);
+	for (int i = 0;i < boardSize;i++) {
+		for (int j = 0;j < boardSize;j++) {
+			boardMap[i][j] = new Static();
+			boardMap[i][j]->SetName("Wall");
+			boardMap[i][j]->SetBitMap("Wall.jpg");
+		}
+	}
+
 }
 
 
@@ -24,7 +33,14 @@ GameObject* MainBoard::GetLocationData(Vector2 pos)
 
 void MainBoard::SetBoardSize(int size)
 {
+	if (boardMap.size() < size) {
+		boardMap.resize(size);
+		for (int i = 0;i < boardMap.size();i++) {
+			boardMap[i].resize(size);
+		}
+	}
 	boardSize = size;
+
 }
 
 void MainBoard::AdvanceStep()

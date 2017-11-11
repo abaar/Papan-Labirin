@@ -34,13 +34,19 @@ void GameObject::SetBitMap(string path)
 		wxStandardPaths &stdPaths = wxStandardPaths::Get();
 		wxString fileLocation = stdPaths.GetExecutablePath();
 		fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + path);
+		wxMessageOutputDebug().Printf("Relative path of image is at %s",fileLocation);
 		wxImage image(fileLocation, wxBITMAP_TYPE_JPEG);
-		image.Rescale(50, 50);
+		//image.Rescale(50, 50);
 		sprite = new wxBitmap(image);
 	}
 	else {
 		sprite = nullptr;
 	}
+}
+
+wxBitmap * GameObject::GetBitMap()
+{
+	return sprite;
 }
 
 string GameObject::GetName()

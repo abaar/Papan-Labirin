@@ -16,6 +16,7 @@ public:
 	void SetPosition(Vector2 &position);
 	void SetName(string name);
 	void SetBitMap(string path);
+	wxBitmap* GetBitMap();
 	string GetName();
 	Vector2 GetPosition();
 	virtual int onCollision(GameObject *collider);
