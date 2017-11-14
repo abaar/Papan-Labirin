@@ -6,7 +6,6 @@ MainBoard* MainBoard::main = NULL;
 MainBoard::MainBoard()
 {
 	boardSize = 0;
-	mainPlayer = new MainCharacter("");
 	LoadMap("test");
 	/*
 	SetBoardSize(5);
@@ -24,10 +23,18 @@ MainBoard::MainBoard()
 
 MainBoard::~MainBoard()
 {
-	delete mainPlayer;
 	//here , should delete board Map since boardMap hold a 
 		//heap memory from Factory CreateObject
-}
+	GameObject *deletion;
+	for (int i = 0; i < boardSize; ++i) {
+		for (int j = 0; j < boardSize; ++j) {
+			deletion = boardMap[i][j];
+			delete deletion;
+		}
+	}
+	boardMap.clear();
+} //obj deletion automatically deleted here, it is only a pointer to reference
+	//boardMap which hold a heap memmory. Maybe. 
 
 int MainBoard::GetBoardSize()
 {
@@ -54,11 +61,10 @@ void MainBoard::SetBoardSize(int size)
 void MainBoard::AdvanceStep()
 {
 	for (int i = 0;i < enemyData.size();i++) {
-		Vector2 holder = enemyData[i],target_movement;
-		target_movement = boardMap[holder.first][holder.second]->move(); //move return a Vector2 value
-		SwapGameObject(holder, target_movement); //swap the object
-											//thus , we must ensure that we swap the enemy
-											//with a free object. It is done in move().
+		Vector2 holder = enemyData[i];
+		boardMap[holder.first][holder.second]->move(); //here,the positionX & Y will change
+		//so ensure that the movement doesn't hit the wall or out of the map
+		
 	}
 }
 
@@ -72,6 +78,16 @@ void MainBoard::SwapGameObject(GameObject * first, GameObject * second)
 	boardMap[first->GetPosition().first][first->GetPosition().second] = second;
 	boardMap[second->GetPosition().first][second->GetPosition().second] = first;
 	wxMessageOutputDebug().Printf("Swapped %s with %s", first->GetName(),second->GetName());
+}
+
+void MainBoard::setPlayerCat(Vector2 playerCat)
+{
+	this->playerCat = playerCat;
+}
+
+Vector2 MainBoard::getPlayerCat()
+{
+	return playerCat;
 }
 
 bool MainBoard::LoadMap(string path)
@@ -91,16 +107,25 @@ bool MainBoard::LoadMap(string path)
 			switch (objectType) {
 			case 1:
 				boardMap[j][i] = Factory::CreateObject("Wall"); //enemyData trus gunanya apa?
+				boardMap[j][i]->SetPosition(Vector2(j, i));
 				break;
 			case 2:
-				boardMap[j][i] = Factory::CreateObject("Enemy");
-				enemyData.push_back(Vector2(j, i)); //to know where the enemies are at initialization
+				boardMap[j][i] =Factory::CreateObject("Enemy");
+				boardMap[j][i]->SetPosition(Vector2(j, i));
+				enemyData.push_back(Vector2(j,i)); //to know where the enemies are at initialization
 				break;
 			case 3:
 				boardMap[j][i] = Factory::CreateObject("Relic");
+				boardMap[j][i]->SetPosition(Vector2(j, i));
+				break;
+			case 4:
+				boardMap[j][i] = Factory::CreateObject("Character");
+				boardMap[j][i]->SetPosition(Vector2(j, i));
+				playerCat = Vector2(j, i);
 				break;
 			default:
 				boardMap[j][i] = Factory::CreateObject("Free");
+				boardMap[j][i]->SetPosition(Vector2(j, i));
 				break;
 			}
 		}

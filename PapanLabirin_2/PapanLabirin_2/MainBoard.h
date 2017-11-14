@@ -22,7 +22,9 @@ public:
 	void AdvanceStep();
 	void SwapGameObject(Vector2 first, Vector2 second);
 	void SwapGameObject(GameObject* first, GameObject* second);
-	MainCharacter *mainPlayer;
+	void setPlayerCat(Vector2 playerCat);
+	Vector2 getPlayerCat();
+//	MainCharacter *mainPlayer;
 
 
 private:
@@ -34,7 +36,7 @@ private:
 		//gak usah pake static & dynamic & EnemyData diganti vector yg hold Vector2 koordinat enemy
 		//jd nanti yg di otak atik boardMap di alamat enemydata.
 	
-	
+	Vector2 playerCat; //to keep track the player's coordinat
 	int boardSize;
 	
 };

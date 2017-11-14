@@ -65,7 +65,8 @@ int GameObject::onCollision(GameObject *collider)
 	return 0;
 }
 
-Vector2 GameObject::move()
+void GameObject::move()
 {
-	//backtrack with the shortest path to kill the mainPlayer
+	//just check wheter the movement goes to wall / out of the map or not.
+	wxMessageOutputDebug().Printf("Shit!");
 }

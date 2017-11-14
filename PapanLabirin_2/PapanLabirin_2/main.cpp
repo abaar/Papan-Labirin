@@ -16,6 +16,7 @@ bool MainApp::OnInit() {
 	frame->Show(true);
 	MainBoard *currentBoard = new MainBoard();
 	MainBoard::main = currentBoard;
+	MainBoard::main->AdvanceStep(); //here makes the pict inaccessable / deleted
 	//while (1) {
 		//currentBoard->SwapGameObject(Vector2(2, 0), Vector2(2, 1));
 		//Sleep(5000);

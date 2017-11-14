@@ -3,7 +3,6 @@
 MainCharacter::MainCharacter(string name)
 {
 	playerName = name;
-	SetPosition(0, 0); //initialize that a player always starts at 0 0
 }
 
 MainCharacter::~MainCharacter()

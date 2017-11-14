@@ -36,27 +36,19 @@ void ImageWindow::OnPaint(wxPaintEvent &event) {
 
 void ImageWindow::OnKeyDown(wxKeyEvent &event) { //edit every mainPlayer's position as a key is pressed
 	if (event.GetKeyCode() == WXK_UP) {
-		Vector2 handler = MainBoard::main->mainPlayer->GetPosition(); //return current mainplayer position
-		handler.first--; //x=x-1 or goes up  /*edit its position
-		MainBoard::main->mainPlayer->SetPosition(handler);
+
 		wxMessageOutputDebug().Printf("Key Up pressed");
 	}
 	else if (event.GetKeyCode() == WXK_DOWN) {
-		Vector2 handler = MainBoard::main->mainPlayer->GetPosition();
-		handler.first++; //x=x+1 or goes down
-		MainBoard::main->mainPlayer->SetPosition(handler);
+
 		wxMessageOutputDebug().Printf("Key Down pressed");
 	}
 	else if (event.GetKeyCode() == WXK_LEFT) {
-		Vector2 handler = MainBoard::main->mainPlayer->GetPosition();
-		handler.second--; //x=x-1 or goes left
-		MainBoard::main->mainPlayer->SetPosition(handler);
+
 		wxMessageOutputDebug().Printf("Key Left pressed");
 	}
 	else if (event.GetKeyCode() == WXK_RIGHT) {
-		Vector2 handler = MainBoard::main->mainPlayer->GetPosition();
-		handler.first++; //x=x-1 or goes right
-		MainBoard::main->mainPlayer->SetPosition(handler);
+
 		wxMessageOutputDebug().Printf("Key Right pressed");
 	}
 }
