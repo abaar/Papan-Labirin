@@ -13,4 +13,6 @@ Enemy::~Enemy()
 
 void Enemy::Move()
 {
+	//backtrack here
+
 }

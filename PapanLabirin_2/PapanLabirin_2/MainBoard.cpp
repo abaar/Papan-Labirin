@@ -6,6 +6,7 @@ MainBoard* MainBoard::main = NULL;
 MainBoard::MainBoard()
 {
 	boardSize = 0;
+	mainPlayer = new MainCharacter("");
 	LoadMap("test");
 	/*
 	SetBoardSize(5);
@@ -23,6 +24,9 @@ MainBoard::MainBoard()
 
 MainBoard::~MainBoard()
 {
+	delete mainPlayer;
+	//here , should delete board Map since boardMap hold a 
+		//heap memory from Factory CreateObject
 }
 
 int MainBoard::GetBoardSize()
@@ -50,7 +54,11 @@ void MainBoard::SetBoardSize(int size)
 void MainBoard::AdvanceStep()
 {
 	for (int i = 0;i < enemyData.size();i++) {
-		enemyData[i]->Move();
+		Vector2 holder = enemyData[i],target_movement;
+		target_movement = boardMap[holder.first][holder.second]->move(); //move return a Vector2 value
+		SwapGameObject(holder, target_movement); //swap the object
+											//thus , we must ensure that we swap the enemy
+											//with a free object. It is done in move().
 	}
 }
 
@@ -82,10 +90,11 @@ bool MainBoard::LoadMap(string path)
 			int objectType = mapData.get()-'0';
 			switch (objectType) {
 			case 1:
-				boardMap[j][i] = Factory::CreateObject("Wall");
+				boardMap[j][i] = Factory::CreateObject("Wall"); //enemyData trus gunanya apa?
 				break;
 			case 2:
 				boardMap[j][i] = Factory::CreateObject("Enemy");
+				enemyData.push_back(Vector2(j, i)); //to know where the enemies are at initialization
 				break;
 			case 3:
 				boardMap[j][i] = Factory::CreateObject("Relic");

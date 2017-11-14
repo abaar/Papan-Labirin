@@ -2,7 +2,7 @@
 #include "Definer.h"
 #include "GameObject.h"
 #include "Static.h"
-#include "Dynamic.h"
+#include "Enemy.h"
 class Factory
 {
 public:

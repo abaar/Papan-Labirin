@@ -7,6 +7,7 @@ GameObject::GameObject()
 
 GameObject::~GameObject()
 {
+	delete sprite; //Should delete to avoid memory leak :)
 }
 
 void GameObject::SetPosition(int x, int y)
@@ -62,4 +63,9 @@ Vector2 GameObject::GetPosition()
 int GameObject::onCollision(GameObject *collider)
 {
 	return 0;
+}
+
+Vector2 GameObject::move()
+{
+	//backtrack with the shortest path to kill the mainPlayer
 }

@@ -13,14 +13,14 @@ Factory::~Factory()
 
 GameObject* Factory::CreateObject(string name)
 {
-	GameObject* data=NULL;
+	GameObject* data=NULL; 
 	if (name == "Wall") {
 		data = new Static();
 		data->SetName(name);
 		data->SetBitMap("Wall.jpg");
 	}
 	else if (name == "Enemy") {
-		data = new Dynamic();
+		data = new Enemy();
 		data->SetName(name);
 		data->SetBitMap("Enemy.jpg");
 	}

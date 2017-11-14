@@ -17,7 +17,7 @@ bool MainApp::OnInit() {
 	MainBoard *currentBoard = new MainBoard();
 	MainBoard::main = currentBoard;
 	//while (1) {
-		currentBoard->SwapGameObject(Vector2(2, 0), Vector2(2, 1));
+		//currentBoard->SwapGameObject(Vector2(2, 0), Vector2(2, 1));
 		//Sleep(5000);
 	//}
 

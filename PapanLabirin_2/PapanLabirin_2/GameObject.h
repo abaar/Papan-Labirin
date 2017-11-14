@@ -20,6 +20,7 @@ public:
 	string GetName();
 	Vector2 GetPosition();
 	virtual int onCollision(GameObject *collider);
+	Vector2 move();
 private:
 	string objectName;
 	int xPosition;
