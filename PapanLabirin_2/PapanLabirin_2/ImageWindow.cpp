@@ -35,20 +35,58 @@ void ImageWindow::OnPaint(wxPaintEvent &event) {
 }
 
 void ImageWindow::OnKeyDown(wxKeyEvent &event) { //edit every mainPlayer's position as a key is pressed
+	Vector2 current_position = MainBoard::main->getPlayerCat();
+	GameObject *current_object;
 	if (event.GetKeyCode() == WXK_UP) {
-
+		if (current_position.first - 1 > -1) {
+			current_position.first--;
+			current_object = MainBoard::main->GetLocationData(current_position);
+			if (current_object->GetName() != "Wall") {
+				
+				MainBoard::main->SwapGameObject(current_position, MainBoard::main->getPlayerCat()); 
+					//swap first the playerCat with current_position which has been edited					
+				MainBoard::main->setPlayerCat(current_position); //then update the playerCat or playerCoordinat
+			}
+		}
 		wxMessageOutputDebug().Printf("Key Up pressed");
 	}
 	else if (event.GetKeyCode() == WXK_DOWN) {
+		if (current_position.first + 1 > MainBoard::main->GetBoardSize()) {
+			current_position.first++;
+			current_object = MainBoard::main->GetLocationData(current_position);
+			if (current_object->GetName() != "Wall") {
 
+				MainBoard::main->SwapGameObject(current_position, MainBoard::main->getPlayerCat());
+				//swap first the playerCat with current_position which has been edited					
+				MainBoard::main->setPlayerCat(current_position); //then update the playerCat or playerCoordinat
+			}
+		}
 		wxMessageOutputDebug().Printf("Key Down pressed");
 	}
 	else if (event.GetKeyCode() == WXK_LEFT) {
+		if (current_position.second - 1 > -1) {
+			current_position.second--;
+			current_object = MainBoard::main->GetLocationData(current_position);
+			if (current_object->GetName() != "Wall") {
 
+				MainBoard::main->SwapGameObject(current_position, MainBoard::main->getPlayerCat());
+				//swap first the playerCat with current_position which has been edited					
+				MainBoard::main->setPlayerCat(current_position); //then update the playerCat or playerCoordinat
+			}
+		}
 		wxMessageOutputDebug().Printf("Key Left pressed");
 	}
 	else if (event.GetKeyCode() == WXK_RIGHT) {
+		if (current_position.second +1 > MainBoard::main->GetBoardSize()) {
+			current_position.second++;
+			current_object = MainBoard::main->GetLocationData(current_position);
+			if (current_object->GetName() != "Wall") {
 
+				MainBoard::main->SwapGameObject(current_position, MainBoard::main->getPlayerCat());
+				//swap first the playerCat with current_position which has been edited					
+				MainBoard::main->setPlayerCat(current_position); //then update the playerCat or playerCoordinat
+			}
+		}
 		wxMessageOutputDebug().Printf("Key Right pressed");
 	}
 }
