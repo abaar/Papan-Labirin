@@ -8,6 +8,7 @@ public:
 	Dynamic();
 	~Dynamic();
 	virtual int Move();
+	void Destroy();
 	int Move(Vector2 pos);
 };
 

@@ -27,6 +27,11 @@ int Dynamic::Move()
 
 }
 
+void Dynamic::Destroy()
+{
+	delete this;
+}
+
 int Dynamic::Move(Vector2 pos)
 {
 	GameObject *collider = MainBoard::main->GetLocationData(Vector2(this->GetPosition().first + pos.first, this->GetPosition().second + pos.second));

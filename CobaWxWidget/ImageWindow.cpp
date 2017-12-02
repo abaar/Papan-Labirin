@@ -1,6 +1,7 @@
 #include "ImageWindow.h"
 #include "wx/stdpaths.h"
 #include "wx/filename.h"
+#include <wx/mediactrl.h>
 #include "MainBoard.h"
 #include "ImageWindow.h"
 #include "GameObject.h"
@@ -8,6 +9,7 @@
 #include <wx/dcbuffer.h>
 #include <string>
 
+#include <Windows.h>
 #define TIMER_ID 2000
 #define ADVANCE_TIMER_ID 2001
 
@@ -35,7 +37,9 @@ ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, 2) {
 	image = nullptr;
 	int width = parent->GetClientSize().GetWidth();
 	int height = parent->GetClientSize().GetHeight();
-
+	//wxSound *player = new wxSound("testMusic.ogg");
+	//player->Play(wxSOUND_LOOP | wxSOUND_ASYNC);
+	PlaySound(TEXT("testMusic.wav"), NULL, SND_LOOP | SND_ASYNC);
 	ButtonImageLoader();
 	ImageLoader(0);
 	playgames = new wxButton(this, 31, wxT(""), wxPoint(width / 2 - 75, height / 2), wxSize(50, 25), wxBORDER_NONE);
@@ -57,7 +61,10 @@ ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, 2) {
 	back = new wxButton(this, 33, wxT(""), wxPoint(0, height - 25), wxSize(50, 25), wxBORDER_NONE);
 	back->SetBitmap(*backImage);
 	back->Show(false);
-	
+	timer = new wxTimer(this, TIMER_ID);
+	advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
+	timer->Start(100);
+	advanceTimer->Start(1000);
 }
 
 ImageWindow::~ImageWindow() {
@@ -132,7 +139,7 @@ void ImageWindow::OnKeyDown(wxKeyEvent &event) { //here error ganti start pusatn
 		if (event.GetKeyCode() == WXK_UP || event.GetKeyCode() == 'W') {
 			if (MainBoard::main->GetPlayer()->GetName() == "Player") {
 				moved = MainBoard::main->GetPlayer()->Move(Vector2(0, -1));
-				//MainBoard::main->AdvanceStep();
+				//////MainBoard::main->AdvanceStep();
 				if (moved) {
 					hold.first--;
 					if (hold.first == 9 && holder.second - hold.first + 1 <= 6) {
@@ -271,10 +278,10 @@ void ImageWindow::SetEasy(wxCommandEvent & event)
 	butmed->Show(false);
 	buthar->Show(false);
 	back->Show(false);
-	timer = new wxTimer(this, TIMER_ID);
-	advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
-	timer->Start(100);
-	advanceTimer->Start(1000);
+	//timer = new wxTimer(this, TIMER_ID);
+	//advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
+	//timer->Start(100);
+	//advanceTimer->Start(1000);
 	timeCounter = 0;
 	MainBoard::main->LoadMap("map0");
 	MainBoard::main->SetLvl(1);
@@ -288,10 +295,10 @@ void ImageWindow::SetMed(wxCommandEvent & event)
 	butmed->Show(false);
 	buthar->Show(false);
 	back->Show(false);
-	timer = new wxTimer(this, TIMER_ID);
-	advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
-	timer->Start(100);
-	advanceTimer->Start(1000);
+	//timer = new wxTimer(this, TIMER_ID);
+	//advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
+	//timer->Start(100);
+	//advanceTimer->Start(1000);
 	timeCounter = 0;
 	MainBoard::main->LoadMap("map3");
 	MainBoard::main->SetLvl(2);
@@ -305,10 +312,10 @@ void ImageWindow::SetHar(wxCommandEvent & event)
 	butmed->Show(false);
 	buthar->Show(false);
 	back->Show(false);
-	timer = new wxTimer(this, TIMER_ID);
-	advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
-	timer->Start(100);
-	advanceTimer->Start(1000);
+	//timer = new wxTimer(this, TIMER_ID);
+	//advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
+	//timer->Start(100);
+	//advanceTimer->Start(1000);
 	timeCounter = 0;
 	MainBoard::main->LoadMap("map10");
 	MainBoard::main->SetLvl(3);
@@ -324,28 +331,29 @@ void ImageWindow::RetryGame(wxCommandEvent & event)
 void ImageWindow::ShutDown(int changetomap, int winloose)
 {
 	/*Object should deleted here,but somehow it thrown exception*/
+	//Somehow, this is wrong approach, and break most rule in KISS, chaos bar kodinganmu --
 	if (winloose == 0) {
 		start = 2;
-		timer->Stop();
-		advanceTimer->Stop();
+		//timer->Stop(); //Bad Approach, timer should never be stopped, used by automatic gameObject rendering!
+		//advanceTimer->Stop();
 		timeCounter = 0;
-		delete timer;
-		delete advanceTimer;
-		timer = nullptr;
-		advanceTimer = nullptr;
+		//delete timer; //wtf??
+		//delete advanceTimer; //wtf??
+		//timer = nullptr;
+		//advanceTimer = nullptr;
 		ImageLoader(winloose);
 		Refresh();
 	}
 	else if (changetomap<20) {
-		timer->Stop();
-		advanceTimer->Stop();
+		//timer->Stop();
+		//advanceTimer->Stop();
 		timeCounter = 0;
-		delete timer;
-		delete advanceTimer;
-		timer = nullptr;
-		advanceTimer = nullptr;
+		//delete timer;
+		//delete advanceTimer;
+		//timer = nullptr;
+		//advanceTimer = nullptr;
 		string changetomap_str = to_string(changetomap);
-		MainBoard::main->deletemyobject();
+		//MainBoard::main->ClearObject(); //Bad implementation of singleton design pattern
 		MainBoard::main->LoadMap("map" + changetomap_str);
 	}
 	else if (changetomap == 20) {

@@ -15,3 +15,8 @@ int Static::onCollision(GameObject *collider)
 {
 	return 0;
 }
+
+void Static::Destroy()
+{
+	delete this;
+}

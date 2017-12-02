@@ -5,9 +5,10 @@ MainBoard* MainBoard::main = NULL;
 
 MainBoard::MainBoard()
 {
-	boardSize = 5;
+	boardSize = 0;
 	dummyWall = (Static*)Factory::CreateObject("Wall");
 	mywindow = nullptr;
+	wxMessageOutputDebug().Printf("%d Initializing", boardSize);
 	
 }
 
@@ -16,10 +17,12 @@ MainBoard::~MainBoard()
 {
 	for (int i = 0;i < boardSize;i++) {
 		for (int j = 0;j < boardSize;j++) {
-			delete boardMap[j][i];
+			if (boardMap[j][i] != NULL) {
+				boardMap[j][i]->Destroy();
+			}
 		}
 	}
-	delete dummyWall;
+	dummyWall->Destroy();
 }
 
 int MainBoard::GetBoardSize()
@@ -133,13 +136,15 @@ void MainBoard::ResetMyImageWindow(int currentlvl,int winloose)
 	mywindow->ShutDown(currentlvl,winloose);
 }
 
-void MainBoard::deletemyobject()
+void MainBoard::ClearObject()
 {
 	enemyData.clear();
 	for (int i = 0; i < boardSize; ++i) {
 		for (int j = 0; j < boardSize; ++j) {
-			wxMessageOutputDebug().Printf("Going to delete %s", boardMap[j][i]->GetName());
-			delete boardMap[j][i];
+			if (boardMap[j][i] != NULL) {
+				wxMessageOutputDebug().Printf("Going to delete %s", boardMap[j][i]->GetName());
+				boardMap[j][i]->Destroy(); //Do NOT EDIT, automatic delete operation!
+			}
 		}
 	}
 }
@@ -151,8 +156,8 @@ int MainBoard::GetViewSize()
 
 void MainBoard::SetStart(Vector2 hold)
 {
-	xstart = hold.first;
-	ystart = hold.second;
+	xStart = hold.first;
+	yStart = hold.second;
 }
 
 int MainBoard::GetCurrentMap()
@@ -162,7 +167,7 @@ int MainBoard::GetCurrentMap()
 
 Vector2 MainBoard::GetStart()
 {
-	return Vector2(xstart, ystart);
+	return Vector2(xStart, yStart);
 }
 
 bool MainBoard::LoadMap(string path)
@@ -179,6 +184,11 @@ bool MainBoard::LoadMap(string path)
 	mapData >> boardSizez;
 	mapData.get();
 	SetBoardSize(boardSizez);
+	boardMap.resize(boardSizez);
+	for (int i = 0;i < boardSizez;i++) {
+		boardMap[i].resize(boardSizez);
+	}
+	ClearObject();
 	for (int i = 0;i < boardSizez;i++) {
 		for (int j = 0;j < boardSizez;j++) {
 			int objectType = mapData.get()-'0';
@@ -200,20 +210,20 @@ bool MainBoard::LoadMap(string path)
 				player = (MainCharacter*)boardMap[j][i];
 				
 				if (j - 5 >= 0 && j + 4 < boardSize) {
-					ystart = j-5;
+					yStart = j-5;
 				}
 				else if (j>=10) {
-					ystart = 10;
+					yStart = 10;
 				}
-				else ystart = 0;
+				else yStart = 0;
 
 				if (i - 5 >= 0 && i + 4 < boardSize) {
-					xstart = i-5;
+					xStart = i-5;
 				}
 				else if (i>=10) {
-					xstart = 10;
+					xStart = 10;
 				}
-				else xstart = 0;
+				else xStart = 0;
 
 				break;
 			case 5:

@@ -33,7 +33,7 @@ public:
 	void DecrementRelic();
 	void SetImageWindow(ImageWindow *temp);
 	void ResetMyImageWindow(int currentlvl,int winloose);
-	void deletemyobject();
+	void ClearObject();
 	int GetViewSize();
 	void SetStart(Vector2 hold);
 	int GetCurrentMap();
@@ -51,8 +51,8 @@ private:
 	Static* dummyWall;
 	int lvl;
 	int viewSize;
-	int xstart;
-	int ystart;
+	int xStart;
+	int yStart;
 	int current_map;
 };
 

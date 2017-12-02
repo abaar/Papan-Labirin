@@ -49,6 +49,11 @@ void GameObject::SetBitMap(string path)
 	}
 }
 
+void GameObject::Destroy()
+{
+	delete this;
+}
+
 wxBitmap * GameObject::GetBitMap()
 {
 	return sprite;

@@ -17,6 +17,7 @@ public:
 	void SetPosition(Vector2 &position);
 	void SetName(string name);
 	void SetBitMap(string path);
+	virtual void Destroy();
 	wxBitmap* GetBitMap();
 	string GetName();
 	Vector2 GetPosition();

@@ -7,5 +7,6 @@ public:
 	Static();
 	~Static();
 	int onCollision(GameObject *collider);
+	void Destroy();
 };
 
