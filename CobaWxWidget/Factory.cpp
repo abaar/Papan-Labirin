@@ -15,10 +15,12 @@ Factory::~Factory()
 GameObject* Factory::CreateObject(string name)
 {
 	GameObject* data=NULL;
-	if (name == "Wall") {
+	string b;
+	for (int i = 0; i < 4; ++i) b += name[i];
+	if (b == "Wall") {
 		data = new Static();
-		data->SetName(name);
-		data->SetBitMap("Wall");
+		data->SetName(b);
+		data->SetBitMap(name);
 	}
 	else if (name == "Enemy") {
 		data = new Dynamic();
