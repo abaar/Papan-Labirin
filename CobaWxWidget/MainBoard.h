@@ -36,6 +36,7 @@ public:
 	void ClearObject();
 	int GetViewSize();
 	void SetStart(Vector2 hold);
+	void SetCurrentMap(int map);
 	int GetCurrentMap();
 	Vector2 GetStart();
 

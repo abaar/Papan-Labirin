@@ -29,6 +29,9 @@ EVT_TIMER(ADVANCE_TIMER_ID, ImageWindow::OnAdvanceTime)
 END_EVENT_TABLE()
 
 ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, 2) {
+	
+	SetInitialSize(wxSize(518, 541));
+	wxMessageOutputDebug().Printf("%d %d", GetClientSize().GetWidth(), GetClientSize().GetHeight());
 	this->SetBackgroundColour(wxColour(*wxWHITE));
 	wxImageHandler *jpegLoader = new wxJPEGHandler();
 	wxImage::AddHandler(jpegLoader);
@@ -39,57 +42,52 @@ ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, 2) {
 	int height = parent->GetClientSize().GetHeight();
 	//wxSound *player = new wxSound("testMusic.ogg");
 	//player->Play(wxSOUND_LOOP | wxSOUND_ASYNC);
-	PlaySound(TEXT("testMusic.wav"), NULL, SND_LOOP | SND_ASYNC);
+	//PlaySound(TEXT("testMusic.wav"), NULL, SND_LOOP | SND_ASYNC);
 	ButtonImageLoader();
-	ImageLoader(0);
-	playgames = new wxButton(this, 31, wxT(""), wxPoint(width / 2 - 75, height / 2), wxSize(50, 25), wxBORDER_NONE);
+
+	playgames = new wxButton(this, 31, wxT(""), wxPoint(171, 210), wxSize(166, 63), wxBORDER_NONE);
 	playgames->SetBitmap(*playImage);
-	helps = new wxButton(this, 32, wxT(""), wxPoint(width / 2 - 104, height / 2+62), wxSize(120, 25), wxBORDER_NONE);
+	helps = new wxButton(this, 32, wxT(""), wxPoint(171, 291), wxSize(170, 68), wxBORDER_NONE);
 	helps->SetBitmap(*howtoImage);
-	credits = new wxButton(this, 34, wxT(""), wxPoint(width / 2 - 97, height / 2 + 62*2), wxSize(100, 25), wxBORDER_NONE);
+	credits = new wxButton(this, 34, wxT(""), wxPoint(171, 376), wxSize(170, 68), wxBORDER_NONE);
 	credits->SetBitmap(*creditImage);
 
-	buteas = new wxButton(this, 27, wxT(""), wxPoint(width / 2 - 75, height / 2 ), wxSize(50, 25), wxBORDER_NONE);
+	buteas = new wxButton(this, 27, wxT(""), wxPoint(175, 209 ), wxSize(167, 66), wxBORDER_NONE);
 	buteas->SetBitmap(*easyImage);
 	buteas->Show(false);
-	butmed = new wxButton(this, 28, wxT(""), wxPoint(width / 2 - 100, height / 2 + 62), wxSize(100, 25), wxBORDER_NONE);
+	butmed = new wxButton(this, 28, wxT(""), wxPoint(175, 291), wxSize(167, 68), wxBORDER_NONE);
 	butmed->SetBitmap(*medImage);
 	butmed->Show(false);
-	buthar = new wxButton(this, 29, wxT(""), wxPoint(width / 2 - 75, height / 2 + 62 *2), wxSize(50, 25), wxBORDER_NONE);
+	buthar = new wxButton(this, 29, wxT(""), wxPoint(175, 376), wxSize(167, 68), wxBORDER_NONE);
 	buthar->SetBitmap(*hardImage);
 	buthar->Show(false);
+
+
 	back = new wxButton(this, 33, wxT(""), wxPoint(0, height - 25), wxSize(50, 25), wxBORDER_NONE);
 	back->SetBitmap(*backImage);
 	back->Show(false);
+	retry = new wxButton(this, 30, wxT(""), wxPoint(width - 50, height - 25), wxSize(50, 25), wxBORDER_NONE);
+	retry->SetBitmap(*retryImage);
+	retry->Show(false);
+
 	timer = new wxTimer(this, TIMER_ID);
 	advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
 	timer->Start(100);
 	advanceTimer->Start(1000);
+	SetBackgroundColour(*wxBLACK);
+	ImageLoader(0);
 }
 
 ImageWindow::~ImageWindow() {
-	delete playImage;
-	delete howtoImage;
-	delete creditImage;
-	delete easyImage;
-	delete medImage;
-	delete hardImage;
 	delete backImage;
-	if (buteas != nullptr) delete buteas;
-
-	if (playgames != nullptr) delete playgames;
-
-	if (helps != nullptr) delete helps;
-
-	if (credits != nullptr) delete credits;
-
-	if (back != nullptr) delete back;
-
-	if (butmed != nullptr) delete butmed;
-
-	if (buthar != nullptr) delete buthar;
-
-	if (image != nullptr) delete image;
+	delete buteas;
+	delete playgames;
+	delete helps;
+	delete credits;
+	delete back;
+	delete butmed;
+	 delete buthar;
+	delete image;
 
 	if (timer != nullptr) { timer->Stop(); delete timer; }
 
@@ -112,8 +110,8 @@ void ImageWindow::OnPaint(wxPaintEvent &event) {
 				hold = MainBoard::main->GetStart();
 			else hold = Vector2(0, 0);
 			//hard error
-			int leftOffset = (500 - MainBoard::main->GetViewSize() * 50) / 2;
-			int upperOffset = leftOffset + 50;
+			int leftOffset = 1+ (500 - MainBoard::main->GetViewSize() * 50) / 2;
+			int upperOffset = leftOffset;
 			if (MainBoard::main != NULL) {
 				for (int i = hold.first; i <hold.first+MainBoard::main->GetViewSize(); i++) {
 					for (int j = hold.second; j <hold.second+MainBoard::main->GetViewSize(); j++) {
@@ -244,18 +242,20 @@ void ImageWindow::PlayTheGame(wxCommandEvent & event)
 
 void ImageWindow::ShowTheHelp(wxCommandEvent & event)
 {
-	playgames->Show(false);
-	helps->Show(false);
-	credits->Show(false);
-	back->Show(true);
+	wxMessageBox(wxString("Temukan semua Relic dan hindari Monster yang ada\nuntuk menuju map selanjutnya yang bertanda X"));
 }
 
 void ImageWindow::ShowHomePage(wxCommandEvent & event)
 {
+	start = 0;
+	ImageLoader(0);
+	Refresh();
+	retry->Show(false);
 	buteas->Show(false);
 	butmed->Show(false);
 	buthar->Show(false);
 	back->Show(false);
+	back->SetBitmap(*backImage);
 	playgames->Show(true);
 	helps->Show(true);
 	credits->Show(true);
@@ -265,10 +265,7 @@ void ImageWindow::ShowHomePage(wxCommandEvent & event)
 
 void ImageWindow::ShowCredits(wxCommandEvent & event)
 {
-	playgames->Show(false);
-	helps->Show(false);
-	credits->Show(false);
-	back->Show(true);
+	wxMessageBox(wxString("Credits to : \n Firman Maulana          059\n Akbar Noto PB             028"));
 }
 
 
@@ -278,10 +275,7 @@ void ImageWindow::SetEasy(wxCommandEvent & event)
 	butmed->Show(false);
 	buthar->Show(false);
 	back->Show(false);
-	//timer = new wxTimer(this, TIMER_ID);
-	//advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
-	//timer->Start(100);
-	//advanceTimer->Start(1000);
+
 	timeCounter = 0;
 	MainBoard::main->LoadMap("map0");
 	MainBoard::main->SetLvl(1);
@@ -295,10 +289,7 @@ void ImageWindow::SetMed(wxCommandEvent & event)
 	butmed->Show(false);
 	buthar->Show(false);
 	back->Show(false);
-	//timer = new wxTimer(this, TIMER_ID);
-	//advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
-	//timer->Start(100);
-	//advanceTimer->Start(1000);
+
 	timeCounter = 0;
 	MainBoard::main->LoadMap("map3");
 	MainBoard::main->SetLvl(2);
@@ -312,10 +303,6 @@ void ImageWindow::SetHar(wxCommandEvent & event)
 	butmed->Show(false);
 	buthar->Show(false);
 	back->Show(false);
-	//timer = new wxTimer(this, TIMER_ID);
-	//advanceTimer = new wxTimer(this, ADVANCE_TIMER_ID);
-	//timer->Start(100);
-	//advanceTimer->Start(1000);
 	timeCounter = 0;
 	MainBoard::main->LoadMap("map10");
 	MainBoard::main->SetLvl(3);
@@ -325,39 +312,38 @@ void ImageWindow::SetHar(wxCommandEvent & event)
 
 void ImageWindow::RetryGame(wxCommandEvent & event)
 {
+	start = 1;
+	retry->Show(false);
+	back->Show(false);
+	int temp = MainBoard::main->GetCurrentMap();
+	MainBoard::main->SetCurrentMap(temp - 2);// -2 karena get nya ++1 dipanggil 2x
+	string changetomap_str = to_string(temp - 2);
+	MainBoard::main->LoadMap("map" + changetomap_str);
 
 }
 
 void ImageWindow::ShutDown(int changetomap, int winloose)
 {
-	/*Object should deleted here,but somehow it thrown exception*/
-	//Somehow, this is wrong approach, and break most rule in KISS, chaos bar kodinganmu --
 	if (winloose == 0) {
 		start = 2;
-		//timer->Stop(); //Bad Approach, timer should never be stopped, used by automatic gameObject rendering!
-		//advanceTimer->Stop();
 		timeCounter = 0;
-		//delete timer; //wtf??
-		//delete advanceTimer; //wtf??
-		//timer = nullptr;
-		//advanceTimer = nullptr;
 		ImageLoader(winloose);
+		retry->Show(true);
+		back->SetBitmap(*backLooseImage);
+		back->Show(true);
 		Refresh();
 	}
-	else if (changetomap<20) {
-		//timer->Stop();
-		//advanceTimer->Stop();
+	else if (changetomap<14) {
+
 		timeCounter = 0;
-		//delete timer;
-		//delete advanceTimer;
-		//timer = nullptr;
-		//advanceTimer = nullptr;
 		string changetomap_str = to_string(changetomap);
-		//MainBoard::main->ClearObject(); //Bad implementation of singleton design pattern
 		MainBoard::main->LoadMap("map" + changetomap_str);
 	}
-	else if (changetomap == 20) {
-		//load win
+	else if (changetomap == 14) {
+		ImageLoader(winloose); 
+		back->SetBitmap(*backWinImage);
+		back->Show(true);
+		Refresh();
 	}
 }
 
@@ -365,33 +351,48 @@ void ImageWindow::ButtonImageLoader()
 {
 	wxStandardPaths &stdPaths = wxStandardPaths::Get();
 	wxString fileLocation = stdPaths.GetExecutablePath();
-	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\play.jpg");
-	wxImage images(fileLocation, wxBITMAP_TYPE_JPEG);
-	this->playImage = new wxBitmap(images);
 	
-	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\credits.jpg");
-	wxImage images1(fileLocation, wxBITMAP_TYPE_JPEG);
-	this->creditImage = new wxBitmap(images1);
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\play.jpg");
+	wxImage image1(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->playImage = new wxBitmap(image1);
 
 	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\howto.jpg");
-	wxImage images2(fileLocation, wxBITMAP_TYPE_JPEG);
-	this->howtoImage = new wxBitmap(images2);
+	wxImage image2(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->howtoImage = new wxBitmap(image2);
+	
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\credits.jpg");
+	wxImage image3(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->creditImage = new wxBitmap(image3);
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\easy.jpg");
+	wxImage image4(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->easyImage = new wxBitmap(image4);
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\medium.jpg");
+	wxImage image5(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->medImage = new wxBitmap(image5);
+	
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\hard.jpg");
+	wxImage image6(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->hardImage = new wxBitmap(image6);
 
 	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\back.jpg");
 	wxImage images3(fileLocation, wxBITMAP_TYPE_JPEG);
 	this->backImage = new wxBitmap(images3);
 
-	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\easy.jpg");
-	wxImage images4(fileLocation, wxBITMAP_TYPE_JPEG);
-	this->easyImage = new wxBitmap(images4);
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\back_loose.jpg");
+	wxImage images7(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->backLooseImage = new wxBitmap(images7);
 
-	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\medium.jpg");
-	wxImage images5(fileLocation, wxBITMAP_TYPE_JPEG);
-	this->medImage = new wxBitmap(images5);
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\back_win.jpg");
+	wxImage images8(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->backWinImage = new wxBitmap(images8);
 
-	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\hard.jpg");
-	wxImage images6(fileLocation, wxBITMAP_TYPE_JPEG);
-	this->hardImage = new wxBitmap(images6);
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\retry.jpg");
+	wxImage images9(fileLocation, wxBITMAP_TYPE_JPEG);
+	this->retryImage = new wxBitmap(images9);
 }
 
 void ImageWindow::ImageLoader(int winloose)

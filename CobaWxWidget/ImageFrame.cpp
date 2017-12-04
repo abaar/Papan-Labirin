@@ -6,8 +6,8 @@
 
 
 ImageFrame::ImageFrame(const wxString & title) : wxFrame(NULL, wxID_ANY, title) {
-	this->SetInitialSize(wxSize(520, 600));
-	this->SetMaxSize(wxSize(520, 600));
+	this->SetInitialSize(wxSize(518, 541));
+	this->SetMaxSize(wxSize(518, 541));
 	gamewindow = new ImageWindow(this);
 	gamewindow->Show(true);
 	

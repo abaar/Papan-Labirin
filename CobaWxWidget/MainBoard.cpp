@@ -162,6 +162,11 @@ void MainBoard::SetStart(Vector2 hold)
 	yStart = hold.second;
 }
 
+void MainBoard::SetCurrentMap(int map)
+{
+	current_map = map;
+}
+
 int MainBoard::GetCurrentMap()
 {
 	return ++current_map;
@@ -262,7 +267,7 @@ bool MainBoard::LoadMap(string path)
 					else if (kiri && atas && kanan &&!bawah && !kiri_atas && !kanan_atas) wall_str = "Wall24";
 					else if (atas && kanan && bawah && !kiri && !kanan_atas && !kanan_bawah) wall_str = "Wall25";
 					else if (kiri &&  kanan && bawah && !atas && !kiri_bawah && !kanan_bawah) wall_str = "Wall26";
-					else if (kiri && atas && bawah && !kanan && kiri_atas && !kiri_bawah) wall_str = "Wall27";
+					else if (kiri && atas && bawah && !kanan && kiri_atas) wall_str = "Wall27";
 					else if (kiri && bawah && kanan && kiri_bawah && !kanan_bawah && !atas) wall_str = "Wall28";
 					else if (atas && kiri && bawah && kiri_atas && !kanan && !kiri_bawah) wall_str = "Wall29";
 					else if (atas && kiri && kanan && kanan_atas && !bawah && !kiri_atas) wall_str = "Wall30";

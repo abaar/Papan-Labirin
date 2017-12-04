@@ -33,6 +33,8 @@ private:
 	wxBitmap *creditImage;
 	wxBitmap *howtoImage;
 	wxBitmap *backImage;
+	wxBitmap *backLooseImage;
+	wxBitmap *backWinImage;
 	wxBitmap *easyImage;
 	wxBitmap *medImage;
 	wxBitmap *hardImage;
