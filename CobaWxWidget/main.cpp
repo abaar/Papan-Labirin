@@ -12,8 +12,8 @@ DECLARE_APP(MainApp)
 
 bool MainApp::OnInit() {
 	
-	MainBoard *currentBoard = new MainBoard();
-	MainBoard::main = currentBoard;
+	//MainBoard *currentBoard = new MainBoard();
+	//MainBoard::main = currentBoard;
 	ImageFrame *frame = new ImageFrame("PapanLabirin");
 	frame->Show(true);
 	

@@ -25,31 +25,37 @@ public:
 	void ShutDown(int changetomap, int winloose);
 	void ButtonImageLoader();
 	void ImageLoader(int winloose);
+	void ScoreLoader(int score);
 private:
 	wxFrame *parent;
 	int start; //start = 0 (Starting Window) ; start=1 (in-game) ; start=2 (result)
-	wxBitmap *image;
-	wxBitmap *playImage;
-	wxBitmap *creditImage;
-	wxBitmap *howtoImage;
-	wxBitmap *backImage;
-	wxBitmap *backLooseImage;
-	wxBitmap *backWinImage;
-	wxBitmap *easyImage;
-	wxBitmap *medImage;
-	wxBitmap *hardImage;
-	wxBitmap *retryImage;
-	wxButton *buteas;
-	wxButton *butmed;
-	wxButton *buthar;
-	wxButton *back;
-	wxButton *retry;
-	wxButton *playgames;
-	wxButton *helps;
-	wxButton *credits;
-	wxTimer *timer;
-	wxTimer *advanceTimer;
+	wxBitmap *image; //
+	wxBitmap *playImage; //
+	wxBitmap *creditImage; //
+	wxBitmap *howtoImage; //
+	wxBitmap *backImage; // 
+	wxBitmap *backLooseImage; //
+	wxBitmap *backWinImage; //
+	wxBitmap *easyImage; //
+	wxBitmap *medImage; //
+	wxBitmap *hardImage; //
+	wxBitmap *retryImage; //
+	wxBitmap *scorevalue[5]; //
+	wxButton *buteas; //
+	wxButton *butmed; //
+	wxButton *buthar; //
+	wxButton *back; //
+	wxButton *retry; //
+	wxButton *playgames; //
+	wxButton *helps; //
+	wxButton *credits; //
+	wxTimer *timer;//
+	wxTimer *advanceTimer;//
+	wxImageHandler *jpegLoader;
+	wxImageHandler *pngLoader;
 	DECLARE_EVENT_TABLE()
 	int timeCounter;
+	int keystroke;
+	int score;
 	int moved;
 };

@@ -6,7 +6,6 @@ MainBoard* MainBoard::main = NULL;
 MainBoard::MainBoard()
 {
 	boardSize = 0;
-	dummyWall = (Static*)Factory::CreateObject("Wall");
 	mywindow = nullptr;
 	wxMessageOutputDebug().Printf("%d Initializing", boardSize);
 	
@@ -351,5 +350,3 @@ int MainBoard::GetLvl()
 	return lvl;
 }
 
-/*
-*/

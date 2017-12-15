@@ -8,7 +8,7 @@
 #include <wx\arrimpl.cpp>
 #include <wx/dcbuffer.h>
 #include <string>
-
+#include "wx/sound.h"
 #include <Windows.h>
 #define TIMER_ID 2000
 #define ADVANCE_TIMER_ID 2001
@@ -33,18 +33,23 @@ ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, 2) {
 	SetInitialSize(wxSize(518, 541));
 	wxMessageOutputDebug().Printf("%d %d", GetClientSize().GetWidth(), GetClientSize().GetHeight());
 	this->SetBackgroundColour(wxColour(*wxWHITE));
-	wxImageHandler *jpegLoader = new wxJPEGHandler();
+	jpegLoader = new wxJPEGHandler();
+	pngLoader = new wxPNGHandler();
 	wxImage::AddHandler(jpegLoader);
+	wxImage::AddHandler(pngLoader);
 	start = 0;
+	score = 0;
 	this->parent = parent;
 	image = nullptr;
+	for (int i = 0; i < 5; ++i) scorevalue[i] = nullptr;
 	int width = parent->GetClientSize().GetWidth();
 	int height = parent->GetClientSize().GetHeight();
-	//wxSound *player = new wxSound("testMusic.ogg");
+
+	//wxSound *player = new wxSound("testMusic.wav");
 	//player->Play(wxSOUND_LOOP | wxSOUND_ASYNC);
 	//PlaySound(TEXT("testMusic.wav"), NULL, SND_LOOP | SND_ASYNC);
+	
 	ButtonImageLoader();
-
 	playgames = new wxButton(this, 31, wxT(""), wxPoint(171, 210), wxSize(166, 63), wxBORDER_NONE);
 	playgames->SetBitmap(*playImage);
 	helps = new wxButton(this, 32, wxT(""), wxPoint(171, 291), wxSize(170, 68), wxBORDER_NONE);
@@ -79,32 +84,48 @@ ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, 2) {
 }
 
 ImageWindow::~ImageWindow() {
-	delete backImage;
-	delete buteas;
-	delete playgames;
-	delete helps;
-	delete credits;
 	delete back;
+	delete backImage;
+	delete backLooseImage;
+	delete backWinImage;
+
+	delete playgames;
+	delete playImage;
+
+	delete helps;
+	delete howtoImage;
+
+	delete credits;
+	delete creditImage;
+
+	delete buteas;
+	delete easyImage;
+
 	delete butmed;
-	 delete buthar;
+	delete medImage;
+
+	delete buthar;
+	delete hardImage; 
+
 	delete image;
+
+	delete retry;
+	delete retryImage;
+
+
+	for (int i = 0; i < 5; ++i) if (scorevalue[i]!=nullptr) delete scorevalue[i];
 
 	if (timer != nullptr) { timer->Stop(); delete timer; }
 
 	if (advanceTimer != nullptr) { advanceTimer->Stop(); delete advanceTimer; }
 
-	if (retry != nullptr) delete retry;
 }
 
 
 
 void ImageWindow::OnPaint(wxPaintEvent &event) {
 		wxPaintDC pdc(this);
-		if (start == 0) {
-			if (image != nullptr) { pdc.DrawBitmap(*image, wxPoint(0, 0)); }
-		}
-		
-		else if (start==1) {
+		if (start==1) {
 			Vector2 hold;
 			if (MainBoard::main->GetLvl() == 3) 
 				hold = MainBoard::main->GetStart();
@@ -124,16 +145,25 @@ void ImageWindow::OnPaint(wxPaintEvent &event) {
 			}
 		}
 		else if (start == 2) {
+			if (image != nullptr)pdc.DrawBitmap(*image, wxPoint(0, 0));
+			int offset = 25;
+			for (int i = 0; i < 5; ++i) {
+				if (scorevalue[i]!=nullptr)pdc.DrawBitmap(*scorevalue[i], wxPoint(i*offset, 0));
+			}
+
+		}
+		else
+		{
 			if (image!=nullptr)pdc.DrawBitmap(*image, wxPoint(0, 0));
 		}
 }
 
 void ImageWindow::OnKeyDown(wxKeyEvent &event) { //here error ganti start pusatnya
-	if (start==1) {					//solusi -> pindah sesuai sukses gerakan dan pusat characternya
+	if (start==1) {		//solusi -> pindah sesuai sukses gerakan dan pusat characternya
 		Vector2 hold = MainBoard::main->GetStart();
 		Vector2 holder = MainBoard::main->GetPlayer()->GetPosition();
 		wxMessageOutputDebug().Printf("%d %d | %d %d", hold.first, hold.second, holder.first, holder.second);
-				
+		++keystroke;
 		if (event.GetKeyCode() == WXK_UP || event.GetKeyCode() == 'W') {
 			if (MainBoard::main->GetPlayer()->GetName() == "Player") {
 				moved = MainBoard::main->GetPlayer()->Move(Vector2(0, -1));
@@ -242,12 +272,20 @@ void ImageWindow::PlayTheGame(wxCommandEvent & event)
 
 void ImageWindow::ShowTheHelp(wxCommandEvent & event)
 {
-	wxMessageBox(wxString("Temukan semua Relic dan hindari Monster yang ada\nuntuk menuju map selanjutnya yang bertanda X"));
+	back->Show(true);
+	helps->Show(false);
+	playgames->Show(false);
+	credits->Show(false);
+	start = 3;
+	delete image;
+	ImageLoader(0);
+	Refresh();
 }
 
 void ImageWindow::ShowHomePage(wxCommandEvent & event)
 {
 	start = 0;
+	delete image;
 	ImageLoader(0);
 	Refresh();
 	retry->Show(false);
@@ -259,13 +297,19 @@ void ImageWindow::ShowHomePage(wxCommandEvent & event)
 	playgames->Show(true);
 	helps->Show(true);
 	credits->Show(true);
-	ImageLoader(0);
 }
 
 
 void ImageWindow::ShowCredits(wxCommandEvent & event)
 {
-	wxMessageBox(wxString("Credits to : \n Firman Maulana          059\n Akbar Noto PB             028"));
+	back->Show(true);
+	helps->Show(false);
+	playgames->Show(false);
+	credits->Show(false);
+	start = 4;
+	delete image;
+	ImageLoader(0);
+	Refresh();
 }
 
 
@@ -280,6 +324,7 @@ void ImageWindow::SetEasy(wxCommandEvent & event)
 	MainBoard::main->LoadMap("map0");
 	MainBoard::main->SetLvl(1);
 	start = 1;
+	delete image;
 	Refresh();
 }
 
@@ -294,6 +339,7 @@ void ImageWindow::SetMed(wxCommandEvent & event)
 	MainBoard::main->LoadMap("map3");
 	MainBoard::main->SetLvl(2);
 	start = 1;
+	delete image;
 	Refresh();
 }
 
@@ -307,12 +353,14 @@ void ImageWindow::SetHar(wxCommandEvent & event)
 	MainBoard::main->LoadMap("map10");
 	MainBoard::main->SetLvl(3);
 	start = 1;
+	delete image;
 	Refresh();
 } //delete objeknya belum, jadi ketindes2
 
 void ImageWindow::RetryGame(wxCommandEvent & event)
 {
 	start = 1;
+	delete image;
 	retry->Show(false);
 	back->Show(false);
 	int temp = MainBoard::main->GetCurrentMap();
@@ -331,18 +379,46 @@ void ImageWindow::ShutDown(int changetomap, int winloose)
 		retry->Show(true);
 		back->SetBitmap(*backLooseImage);
 		back->Show(true);
+		ScoreLoader(score);
+		score = 0;
 		Refresh();
 	}
 	else if (changetomap<14) {
+		int lvl = MainBoard::main->GetLvl();
+		double score1;
+		if (lvl == 1) {
+			score1 = (double)((double)(20.0 / keystroke) * 1000.0);
+		}
+		else if (lvl == 2) {
+			score1 = (double)((double)(30.0 / keystroke) * 2000.0);
+		}
+		else if (lvl == 3) {
+			score1 = (double)((double)(60.0 / keystroke) * 3000.0);
+		}keystroke = 0;
 
+		this->score +=round(score1);
 		timeCounter = 0;
 		string changetomap_str = to_string(changetomap);
 		MainBoard::main->LoadMap("map" + changetomap_str);
 	}
 	else if (changetomap == 14) {
+		double score1;
+		int lvl = MainBoard::main->GetLvl();
+		if (lvl == 1) {
+			score1 =(double) ((double)(20 / keystroke) * 1000.0);
+		}
+		else if (lvl == 2) {
+			score1 = (double)((double)(30 / keystroke) * 2000.0);
+		}
+		else if (lvl == 3) {
+			score1 = (double)((double)(60 / keystroke) * 3000.0);
+		}
+		this->score += round(score1);
 		ImageLoader(winloose); 
 		back->SetBitmap(*backWinImage);
 		back->Show(true);
+		ScoreLoader(score);
+		score = 0;
 		Refresh();
 	}
 }
@@ -412,8 +488,63 @@ void ImageWindow::ImageLoader(int winloose)
 			fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\Loose.jpg");
 		}
 	}
+	else if (start == 3) {
+		fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\PageHowTo.jpg");
+	}
+	else if (start == 4) {
+		fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\PageCredits.jpg");
+	}
 	wxMessageOutputDebug().Printf("Relative path of image is at %s", fileLocation);
 	wxImage images(fileLocation, wxBITMAP_TYPE_JPEG);
 	this->image = new wxBitmap(images);
+}
+
+void ImageWindow::ScoreLoader(int score)
+{
+	wxStandardPaths &stdPaths = wxStandardPaths::Get();
+	wxString fileLocation = stdPaths.GetExecutablePath();
+	int puluhribuan;
+	int ribuan;
+	int ratusan;
+	int puluhan;
+	int satuan;
+	wxMessageOutputDebug().Printf("%d", score);
+	satuan = score % 10;
+	score /= 10;
+	puluhan = score % 10;
+	score /= 10;
+	ratusan = score % 10;
+	score /= 10;
+	ribuan = score % 10;
+	score /= 10;
+	puluhribuan = score % 10;
+	score /= 10;
+
+
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + to_string(satuan) + ".png");
+	wxImage image1(fileLocation, wxBITMAP_TYPE_PNG);
+	this->scorevalue[4] = new wxBitmap(image1);
+
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + to_string(puluhan) + ".png");
+	wxImage image2(fileLocation, wxBITMAP_TYPE_PNG);
+	this->scorevalue[3] = new wxBitmap(image2);
+
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + to_string(ratusan) + ".png");
+	wxImage image3(fileLocation, wxBITMAP_TYPE_PNG);
+	this->scorevalue[2] = new wxBitmap(image3);
+
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + to_string(ribuan) + ".png");
+	wxImage image4(fileLocation, wxBITMAP_TYPE_PNG);
+	this->scorevalue[1] = new wxBitmap(image4);
+
+
+	fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + to_string(puluhribuan) + ".png");
+	wxImage image5(fileLocation, wxBITMAP_TYPE_PNG);
+	this->scorevalue[0] = new wxBitmap(image5);
+
 }
 
