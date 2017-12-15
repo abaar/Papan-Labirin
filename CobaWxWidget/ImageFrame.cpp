@@ -10,4 +10,5 @@ ImageFrame::ImageFrame(const wxString & title) : wxFrame(NULL, wxID_ANY, title) 
 	this->SetMaxSize(wxSize(518, 541));
 	gamewindow = new ImageWindow(this);
 	gamewindow->Show(true);
+	MainBoard::main->SetImageWindow(gamewindow);
 }
