@@ -47,7 +47,7 @@ ImageWindow::ImageWindow(wxFrame *parent) : wxWindow(parent, 2) {
 
 	//wxSound *player = new wxSound("testMusic.wav");
 	//player->Play(wxSOUND_LOOP | wxSOUND_ASYNC);
-	//PlaySound(TEXT("testMusic.wav"), NULL, SND_LOOP | SND_ASYNC);
+	PlaySound(TEXT("testMusic.wav"), NULL, SND_LOOP | SND_ASYNC);
 	
 	ButtonImageLoader();
 	playgames = new wxButton(this, 31, wxT(""), wxPoint(171, 210), wxSize(166, 63), wxBORDER_NONE);
@@ -107,7 +107,9 @@ ImageWindow::~ImageWindow() {
 	delete buthar;
 	delete hardImage; 
 
-	delete image;
+	if (image) {
+		delete image;
+	}
 
 	delete retry;
 	delete retryImage;

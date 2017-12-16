@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Definer.h"
 #include "GameObject.h"
 #include "Static.h"
@@ -6,6 +7,7 @@
 #include "MainCharacter.h"
 #include "Factory.h"
 #include "ImageWindow.h"
+
 using namespace std;
 
 

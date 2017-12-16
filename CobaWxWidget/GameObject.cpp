@@ -35,16 +35,23 @@ void GameObject::SetName(string name)
 void GameObject::SetBitMap(string path)
 {
 	if (path.length()) {
+		if (sprite != NULL) {
+			delete sprite;
+			sprite = NULL;
+		}
 		wxStandardPaths &stdPaths = wxStandardPaths::Get();
 		wxString fileLocation = stdPaths.GetExecutablePath();
 		fileLocation = wxFileName(fileLocation).GetPath() + wxT("\\" + path + ".jpg");
 		wxMessageOutputDebug().Printf("Relative path of image is at %s",fileLocation);
 		wxImage image(fileLocation, wxBITMAP_TYPE_JPEG);
 		image.Rescale(TILESIZE, TILESIZE);
-		if (sprite != nullptr) delete sprite;
+		if (sprite != NULL) delete sprite;
 		sprite = new wxBitmap(image);
 	}
 	else {
+		if (sprite != NULL) {
+			delete sprite;
+		}
 		sprite = nullptr;
 	}
 }

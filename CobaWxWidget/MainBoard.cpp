@@ -14,6 +14,8 @@ MainBoard::MainBoard()
 
 MainBoard::~MainBoard()
 {
+	ClearObject();
+	/*
 	for (int i = 0;i < boardSize;i++) {
 		for (int j = 0;j < boardSize;j++) {
 			if (boardMap[j][i] != NULL) {
@@ -21,7 +23,10 @@ MainBoard::~MainBoard()
 			}
 		}
 	}
-	dummyWall->Destroy();
+	*/
+	if (dummyWall) {
+		dummyWall->Destroy();
+	}
 }
 
 int MainBoard::GetBoardSize()
@@ -145,6 +150,7 @@ void MainBoard::ClearObject()
 			if (boardMap[j][i] != NULL) {
 				wxMessageOutputDebug().Printf("Going to delete %s", boardMap[j][i]->GetName());
 				boardMap[j][i]->Destroy(); //Do NOT EDIT, automatic delete operation!
+				boardMap[j][i] = NULL;
 			}
 		}
 	}
@@ -188,13 +194,15 @@ bool MainBoard::LoadMap(string path)
 	}
 	int boardSizez;
 	mapData >> boardSizez;
+	ClearObject();
 	mapData.get();
 	SetBoardSize(boardSizez);
 	boardMap.resize(boardSizez);
+	
 	for (int i = 0;i < boardSizez;i++) {
 		boardMap[i].resize(boardSizez);
 	}
-	ClearObject();
+	
 	int arr[21][21];
 	for (int i = 0;i < boardSizez;i++) {
 		for (int j = 0; j < boardSizez; j++) {
