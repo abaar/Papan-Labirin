@@ -12,7 +12,7 @@ class GameObject
 public:
 	GameObject();
 	~GameObject();
-
+	static int count;
 	void SetPosition(int x, int y);
 	void SetPosition(Vector2 &position);
 	void SetName(string name);

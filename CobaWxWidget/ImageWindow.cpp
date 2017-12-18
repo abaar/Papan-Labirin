@@ -120,7 +120,7 @@ ImageWindow::~ImageWindow() {
 	if (timer != nullptr) { timer->Stop(); delete timer; }
 
 	if (advanceTimer != nullptr) { advanceTimer->Stop(); delete advanceTimer; }
-
+	wxMessageOutputDebug().Printf("Image Window Deleted!");
 }
 
 
@@ -327,6 +327,7 @@ void ImageWindow::SetEasy(wxCommandEvent & event)
 	MainBoard::main->SetLvl(1);
 	start = 1;
 	delete image;
+	image = nullptr;
 	Refresh();
 }
 
@@ -342,6 +343,7 @@ void ImageWindow::SetMed(wxCommandEvent & event)
 	MainBoard::main->SetLvl(2);
 	start = 1;
 	delete image;
+	image = nullptr;
 	Refresh();
 }
 
@@ -356,6 +358,7 @@ void ImageWindow::SetHar(wxCommandEvent & event)
 	MainBoard::main->SetLvl(3);
 	start = 1;
 	delete image;
+	image = nullptr;
 	Refresh();
 } //delete objeknya belum, jadi ketindes2
 

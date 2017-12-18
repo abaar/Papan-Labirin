@@ -3,6 +3,8 @@
 #include "MainBoard.h"
 
 class MainApp : public wxApp {
+private:
+	ImageFrame *frame;
 public: 
 	virtual bool OnInit();
 	~MainApp();
@@ -15,7 +17,7 @@ bool MainApp::OnInit() {
 	
 	MainBoard *currentBoard = new MainBoard();
 	MainBoard::main = currentBoard;
-	ImageFrame *frame = new ImageFrame("PapanLabirin");
+	frame = new ImageFrame("PapanLabirin");
 	frame->Show(true);
 	
 	return true;
@@ -24,4 +26,5 @@ bool MainApp::OnInit() {
 MainApp::~MainApp()
 {
 	delete MainBoard::main;
+	//delete frame;
 }

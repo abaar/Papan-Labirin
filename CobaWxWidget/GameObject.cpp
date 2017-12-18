@@ -1,16 +1,21 @@
 #include "GameObject.h"
-
+int GameObject::count = 0;
 GameObject::GameObject()
 {
 	wxImageHandler *jpegLoader = new wxJPEGHandler();
 	wxImage::AddHandler(jpegLoader);
 	sprite = nullptr;
+	GameObject::count++;
 }
 
 
 GameObject::~GameObject()
 {
-	
+	GameObject::count--;
+	if (sprite) {
+		delete sprite;
+	}
+	wxMessageOutputDebug().Printf("Object Left %d", this->count);
 }
 
 void GameObject::SetPosition(int x, int y)

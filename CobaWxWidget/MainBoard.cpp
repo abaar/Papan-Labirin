@@ -27,6 +27,7 @@ MainBoard::~MainBoard()
 	if (dummyWall) {
 		dummyWall->Destroy();
 	}
+	wxMessageOutputDebug().Printf("Destroyinh Mainboard");
 }
 
 int MainBoard::GetBoardSize()
@@ -108,6 +109,8 @@ void MainBoard::FillTile(Vector2 pos, string tileName)
 
 void MainBoard::FillTile(GameObject * data, string tileName)
 {
+	//delete data->GetBitMap();
+
 	data->SetBitMap(tileName);
 	data->SetName(tileName);
 }
